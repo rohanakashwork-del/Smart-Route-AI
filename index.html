@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NER SmartRoute AI</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+}
+
+/* ================= LOGIN ================= */
+
+#loginPage{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:linear-gradient(135deg,#020617,#0f766e,#164e63);
+}
+
+.login-box{
+    width:100%;
+    max-width:400px;
+    padding:40px;
+    background:rgba(15,23,42,.96);
+    border-radius:20px;
+    box-shadow:0 0 35px rgba(0,255,200,.25);
+    text-align:center;
+}
+
+.login-box h1{
+    color:#2dd4bf;
+    margin-bottom:10px;
+    font-size:30px;
+}
+
+.login-box p{
+    color:#cbd5e1;
+    margin-bottom:25px;
+    line-height:1.5;
+}
+
+.login-box input{
+    width:100%;
+    padding:14px;
+    margin:8px 0;
+    border:none;
+    border-radius:10px;
+    background:#1e293b;
+    color:white;
+    outline:none;
+}
+
+.start-btn{
+    width:100%;
+    padding:14px;
+    margin-top:18px;
+    border:none;
+    border-radius:10px;
+    background:#14b8a6;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= APP ================= */
+
+#app{
+    display:none;
+    min-height:100vh;
+}
+
+/* ================= NAVBAR ================= */
+
+nav{
+    min-height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 5%;
+    background:#020617;
+    border-bottom:1px solid #334155;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    color:#2dd4bf;
+}
+
+.nav-buttons{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.nav-buttons button{
+    background:transparent;
+    border:none;
+    color:#cbd5e1;
+    padding:11px 15px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.nav-buttons button:hover,
+.nav-buttons button.active{
+    background:#14b8a6;
+    color:white;
+}
+
+/* ================= PAGES ================= */
+
+.page{
+    display:none;
+    min-height:calc(100vh - 70px);
+    padding:40px 6%;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.page-title h1{
+    font-size:35px;
+    color:#2dd4bf;
+}
+
+.page-title p{
+    color:#94a3b8;
+    margin-top:8px;
+}
+
+/* ================================================= */
+/* HOME IMAGE SLIDER */
+/* ================================================= */
+
+.slider{
+    width:100%;
+    max-width:1100px;
+    height:500px;
+    margin:auto;
+    overflow:hidden;
+    border-radius:20px;
+    position:relative;
+    box-shadow:0 0 30px rgba(0,0,0,.5);
+    background:#1e293b;
+}
+
+.slides{
+    display:flex;
+    width:400%;
+    height:100%;
+    animation:slide 16s infinite;
+}
+
+.slide{
+    width:25%;
+    height:100%;
+    flex-shrink:0;
+    position:relative;
+    cursor:pointer;
+    overflow:hidden;
+    background:#0f172a;
+}
+
+.slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* dark overlay */
+
+.slide::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        transparent 35%,
+        rgba(0,0,0,.9)
+    );
+    z-index:1;
+}
+
+.slide-text{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    padding:35px;
+    z-index:2;
+}
+
+.slide-text h2{
+    font-size:32px;
+    color:#5eead4;
+}
+
+.slide-text p{
+    margin-top:8px;
+    color:#e2e8f0;
+    line-height:1.5;
+}
+
+@keyframes slide{
+
+    0%,20%{
+        transform:translateX(0);
+    }
+
+    25%,45%{
+        transform:translateX(-25%);
+    }
+
+    50%,70%{
+        transform:translateX(-50%);
+    }
+
+    75%,95%{
+        transform:translateX(-75%);
+    }
+
+    100%{
+        transform:translateX(0);
+    }
+}
+
+.slider-note{
+    text-align:center;
+    margin-top:20px;
+    color:#94a3b8;
+}
+
+/* ================= DELIVERY ================= */
+
+.form-box{
+    max-width:700px;
+    margin:auto;
+    padding:30px;
+    background:#1e293b;
+    border-radius:18px;
+    border:1px solid #334155;
+}
+
+.form-box label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:7px;
+    color:#cbd5e1;
+}
+
+.form-box input,
+.form-box select{
+    width:100%;
+    padding:13px;
+    background:#0f172a;
+    border:1px solid #475569;
+    border-radius:8px;
+    color:white;
+    outline:none;
+}
+
+.action-btn{
+    margin-top:20px;
+    padding:13px 25px;
+    border:none;
+    border-radius:8px;
+    background:#14b8a6;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* ================= AI ROUTE ================= */
+
+.route-card{
+    max-width:900px;
+    margin:15px auto;
+    padding:22px;
+    border-radius:15px;
+    background:#1e293b;
+    border-left:5px solid #14b8a6;
+}
+
+.route-card h3{
+    color:#5eead4;
+    margin-bottom:10px;
+}
+
+.route-card p{
+    color:#cbd5e1;
+    line-height:1.7;
+}
+
+.recommended{
+    border-left-color:#22c55e;
+}
+
+/* ================================================= */
+/* MAP WITHOUT LEAFLET */
+/* ================================================= */
+
+.map-container{
+    max-width:1100px;
+    height:560px;
+    margin:auto;
+    border-radius:20px;
+    overflow:hidden;
+    border:2px solid #334155;
+    box-shadow:0 0 30px rgba(0,0,0,.5);
+    position:relative;
+    background:#dbe7d2;
+}
+
+.real-map{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+}
+
+.real-map iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    z-index:1;
+}
+
+.map-shade{
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    background:rgba(255,255,255,.02);
+}
+
+/* ================= ROUTE ================= */
+
+.route-svg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:5;
+    pointer-events:none;
+}
+
+.route-line{
+    fill:none;
+    stroke:#16a34a;
+    stroke-width:8;
+    stroke-linecap:round;
+    stroke-dasharray:15 10;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.5));
+}
+
+/* ================= MARKERS ================= */
+
+.marker{
+    position:absolute;
+    transform:translate(-50%,-100%);
+    z-index:20;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    pointer-events:none;
+}
+
+.marker-icon{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:#0f172a;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    border:3px solid #14b8a6;
+    box-shadow:0 4px 15px rgba(0,0,0,.55);
+}
+
+.marker-label{
+    margin-top:7px;
+    padding:7px 12px;
+    border-radius:8px;
+    background:rgba(15,23,42,.95);
+    color:white;
+    font-size:13px;
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+/* marker positions */
+
+.guwahati{
+    left:17%;
+    top:25%;
+}
+
+.nongpoh{
+    left:51%;
+    top:56%;
+}
+
+.shillong{
+    left:83%;
+    top:84%;
+}
+
+.vehicle{
+    left:39%;
+    top:44%;
+}
+
+.guwahati .marker-icon{
+    border-color:#14b8a6;
+}
+
+.nongpoh .marker-icon{
+    border-color:#f59e0b;
+}
+
+.shillong .marker-icon{
+    border-color:#22c55e;
+}
+
+.vehicle .marker-icon{
+    border-color:#0284c7;
+}
+
+/* ================= RISK ZONE ================= */
+
+.risk-zone{
+    position:absolute;
+    left:67%;
+    top:57%;
+    width:120px;
+    height:120px;
+    transform:translate(-50%,-50%);
+    z-index:10;
+
+    border:3px dashed #ef4444;
+    border-radius:50%;
+
+    background:rgba(239,68,68,.20);
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    animation:riskPulse 2s infinite;
+}
+
+.risk-zone-icon{
+    font-size:28px;
+}
+
+.risk-zone-text{
+    background:rgba(127,29,29,.95);
+    color:white;
+    padding:5px 9px;
+    border-radius:6px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+@keyframes riskPulse{
+
+    0%{
+        box-shadow:0 0 0 0 rgba(239,68,68,.5);
+    }
+
+    70%{
+        box-shadow:0 0 0 25px rgba(239,68,68,0);
+    }
+
+    100%{
+        box-shadow:0 0 0 0 rgba(239,68,68,0);
+    }
+}
+
+/* ================= MAP TITLE ================= */
+
+.map-title{
+    position:absolute;
+    top:18px;
+    left:18px;
+    z-index:30;
+
+    background:rgba(15,23,42,.94);
+    color:white;
+
+    padding:10px 14px;
+    border-radius:9px;
+
+    font-size:12px;
+    font-weight:bold;
+}
+
+/* ================= LEGEND ================= */
+
+.map-legend{
+    position:absolute;
+    left:18px;
+    bottom:18px;
+    z-index:30;
+
+    background:rgba(15,23,42,.94);
+    color:white;
+
+    padding:13px 16px;
+    border-radius:10px;
+
+    font-size:12px;
+    line-height:2;
+}
+
+.green-line{
+    display:inline-block;
+    width:30px;
+    border-top:4px dashed #16a34a;
+    margin-right:6px;
+    vertical-align:middle;
+}
+
+/* ================= LOCATION ================= */
+
+.location-panel{
+    max-width:1000px;
+    margin:20px auto;
+
+    display:grid;
+    grid-template-columns:repeat(
+        auto-fit,
+        minmax(200px,1fr)
+    );
+
+    gap:15px;
+}
+
+.location-card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:14px;
+    border:1px solid #334155;
+    text-align:center;
+}
+
+.location-card h3{
+    color:#5eead4;
+    margin-bottom:8px;
+}
+
+.location-card p{
+    color:#cbd5e1;
+    line-height:1.5;
+}
+
+.location-card.source{
+    border-top:4px solid #14b8a6;
+}
+
+.location-card.checkpoint{
+    border-top:4px solid #f59e0b;
+}
+
+.location-card.destination{
+    border-top:4px solid #22c55e;
+}
+
+/* ================= MAP INFO ================= */
+
+.map-info{
+    max-width:1000px;
+    margin:20px auto;
+
+    display:grid;
+    grid-template-columns:repeat(
+        auto-fit,
+        minmax(200px,1fr)
+    );
+
+    gap:15px;
+}
+
+.map-box{
+    background:#1e293b;
+    padding:18px;
+    border-radius:12px;
+}
+
+.map-box h4{
+    color:#5eead4;
+    margin-bottom:8px;
+}
+
+.map-box p{
+    color:#cbd5e1;
+}
+
+/* ================= EMERGENCY ================= */
+
+.alert{
+    max-width:900px;
+    margin:15px auto;
+    padding:20px;
+    border-radius:12px;
+    background:#1e293b;
+    border-left:6px solid #ef4444;
+}
+
+.alert.warning{
+    border-left-color:#f59e0b;
+}
+
+.alert.safe{
+    border-left-color:#22c55e;
+}
+
+.alert h3{
+    margin-bottom:8px;
+}
+
+.alert p{
+    color:#cbd5e1;
+    line-height:1.6;
+}
+
+.center{
+    text-align:center;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:750px){
+
+    nav{
+        flex-direction:column;
+        gap:12px;
+        padding:15px;
+    }
+
+    .nav-buttons{
+        width:100%;
+    }
+
+    .nav-buttons button{
+        padding:9px 10px;
+        font-size:12px;
+    }
+
+    .page{
+        padding:25px 15px;
+    }
+
+    .page-title h1{
+        font-size:27px;
+    }
+
+    .slider{
+        height:320px;
+    }
+
+    .slide-text{
+        padding:20px;
+    }
+
+    .slide-text h2{
+        font-size:22px;
+    }
+
+    .slide-text p{
+        font-size:13px;
+    }
+
+    .map-container{
+        height:420px;
+    }
+
+    .marker-icon{
+        width:38px;
+        height:38px;
+        font-size:19px;
+    }
+
+    .marker-label{
+        font-size:10px;
+        padding:5px 7px;
+    }
+
+    .risk-zone{
+        width:85px;
+        height:85px;
+    }
+
+    .risk-zone-icon{
+        font-size:19px;
+    }
+
+    .risk-zone-text{
+        font-size:9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================================================= -->
+<!-- LOGIN -->
+<!-- ================================================= -->
+
+<div id="loginPage">
+
+    <div class="login-box">
+
+        <h1>NER SmartRoute AI</h1>
+
+        <p>
+            Smart Logistics & Accessibility
+            Intelligence Platform
+        </p>
+
+        <input type="text" placeholder="Username">
+
+        <input type="email" placeholder="Email">
+
+        <input type="tel" placeholder="Mobile Number">
+
+        <input type="text" placeholder="Location">
+
+        <button
+            class="start-btn"
+            onclick="startApp()">
+
+            GET STARTED
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- APP -->
+<!-- ================================================= -->
+
+<div id="app">
+
+<nav>
+
+    <div class="logo">
+        NER-SmartRoute AI
+    </div>
+
+    <div class="nav-buttons">
+
+        <button
+            id="btn-home"
+            class="active"
+            onclick="showPage('home')">
+            HOME
+        </button>
+
+        <button
+            id="btn-delivery"
+            onclick="showPage('delivery')">
+            DELIVERY
+        </button>
+
+        <button
+            id="btn-route"
+            onclick="showPage('route')">
+            AI ROUTE
+        </button>
+
+        <button
+            id="btn-mapPage"
+            onclick="showPage('mapPage')">
+            MAP
+        </button>
+
+        <button
+            id="btn-emergency"
+            onclick="showPage('emergency')">
+            EMERGENCY
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- ================================================= -->
+<!-- HOME -->
+<!-- ================================================= -->
+
+<section id="home" class="page active">
+
+    <div class="page-title">
+
+        <h1>
+            Welcome to NER SmartRoute AI
+        </h1>
+
+        <p>
+            AI-powered logistics and accessibility platform
+        </p>
+
+    </div>
+
+
+    <!-- 4 IMAGE SLIDER -->
+
+    <div class="slider">
+
+        <div class="slides">
+
+
+            <!-- IMAGE 1 -->
+
+            <div
+                class="slide"
+                onclick="showPage('delivery')">
+
+                <img
+                    src="images/delivery.jpg"
+                    alt="Delivery">
+
+                <div class="slide-text">
+
+                    <h2>
+                        📦 Delivery Details
+                    </h2>
+
+                    <p>
+                        Manage your delivery
+                        information and logistics
+                        requirements.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 2 -->
+
+            <div
+                class="slide"
+                onclick="showPage('route')">
+
+                <img
+                    src="images/ai-route.jpg"
+                    alt="AI Route">
+
+                <div class="slide-text">
+
+                    <h2>
+                        🤖 AI Route Analysis
+                    </h2>
+
+                    <p>
+                        Find safer and smarter
+                        routes using AI-based
+                        analysis.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 3 -->
+
+            <div
+                class="slide"
+                onclick="showPage('mapPage')">
+
+                <img
+                    src="images/map.jpg"
+                    alt="Smart Map">
+
+                <div class="slide-text">
+
+                    <h2>
+                        🗺️ Smart Map
+                    </h2>
+
+                    <p>
+                        Visualize routes,
+                        locations and risk zones.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- IMAGE 4 -->
+
+            <div
+                class="slide"
+                onclick="showPage('emergency')">
+
+                <img
+                    src="images/emergency.jpg"
+                    alt="Emergency">
+
+                <div class="slide-text">
+
+                    <h2>
+                        🚨 Emergency Dashboard
+                    </h2>
+
+                    <p>
+                        Monitor emergencies
+                        and logistics disruptions.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <p class="slider-note">
+        4 images automatically slide •
+        Click any image to open the section
+    </p>
+
+</section>
+
+
+<!-- ================================================= -->
+<!-- DELIVERY -->
+<!-- ================================================= -->
+
+<section id="delivery" class="page">
+
+    <div class="page-title">
+
+        <h1>Delivery Details</h1>
+
+        <p>
+            Enter your logistics and delivery information
+        </p>
+
+    </div>
+
+    <div class="form-box">
+
+        <label>Source Location</label>
+
+        <input
+            type="text"
+            value="Guwahati"
+            placeholder="Enter source">
+
+        <label>Destination</label>
+
+        <input
+            type="text"
+            value="Shillong"
+            placeholder="Enter destination">
+
+        <label>Goods Type</label>
+
+        <select>
+
+            <option>Essential Goods</option>
+            <option>Medical Supplies</option>
+            <option>Food Products</option>
+            <option>Electronics</option>
+
+        </select>
+
+        <label>Priority</label>
+
+        <select>
+
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+
+        </select>
+
+        <button
+            class="action-btn"
+            onclick="showPage('route')">
+
+            ANALYSE ROUTE
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================================================= -->
+<!-- AI ROUTE -->
+<!-- ================================================= -->
+
+<section id="route" class="page">
+
+    <div class="page-title">
+
+        <h1>AI Route Analysis</h1>
+
+        <p>
+            AI analysed routes based on safety,
+            accessibility and travel time.
+        </p>
+
+    </div>
+
+
+    <div class="route-card recommended">
+
+        <h3>
+            🟢 Route B — Recommended
+        </h3>
+
+        <p>
+
+            <b>
+                Guwahati → Nongpoh → Shillong
+            </b>
+
+            <br><br>
+
+            📏 Distance: 99 km
+
+            <br>
+
+            ⏱️ Estimated Time: 3 hrs 15 mins
+
+            <br>
+
+            🛡️ Risk Level: LOW
+
+            <br>
+
+            ♿ Accessibility: HIGH
+
+            <br><br>
+
+            ⭐ <b>AI Recommendation:</b>
+
+            Best balance between safety,
+            distance and accessibility.
+
+        </p>
+
+    </div>
+
+
+    <div class="route-card">
+
+        <h3>🟡 Route A</h3>
+
+        <p>
+            📏 Distance: 92 km
+            <br>
+            ⏱️ Estimated Time: 3 hrs
+            <br>
+            🛡️ Risk Level: MEDIUM
+            <br>
+            🚗 Heavy traffic detected.
+        </p>
+
+    </div>
+
+
+    <div class="route-card">
+
+        <h3>🔴 Route C</h3>
+
+        <p>
+            📏 Distance: 110 km
+            <br>
+            ⏱️ Estimated Time: 4 hrs
+            <br>
+            🛡️ Risk Level: HIGH
+            <br>
+            ⚠️ Landslide-prone area detected.
+        </p>
+
+    </div>
+
+
+    <div class="center">
+
+        <button
+            class="action-btn"
+            onclick="showPage('mapPage')">
+
+            VIEW ROUTE ON MAP
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================================================= -->
+<!-- MAP -->
+<!-- ================================================= -->
+
+<section id="mapPage" class="page">
+
+    <div class="page-title">
+
+        <h1>Smart Route Map</h1>
+
+        <p>
+            Real OpenStreetMap • No Leaflet
+        </p>
+
+    </div>
+
+
+    <div class="map-container">
+
+        <div class="real-map">
+
+            <!-- REAL MAP -->
+
+            <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox=91.55%2C25.45%2C92.05%2C26.30&layer=mapnik"
+                title="Real OpenStreetMap">
+            </iframe>
+
+
+            <div class="map-shade"></div>
+
+
+            <!-- GREEN ROUTE -->
+
+            <svg
+                class="route-svg"
+                viewBox="0 0 1000 500"
+                preserveAspectRatio="none">
+
+                <path
+                    class="route-line"
+                    d="
+                    M 170 115
+                    C 300 170
+                    400 235
+                    510 280
+                    C 630 330
+                    720 365
+                    830 420
+                    "
+                />
+
+            </svg>
+
+
+            <!-- MAP TITLE -->
+
+            <div class="map-title">
+
+                🗺️ GUWAHATI →
+                NONGPOH →
+                SHILLONG
+
+            </div>
+
+
+            <!-- GUWAHATI -->
+
+            <div class="marker guwahati">
+
+                <div class="marker-icon">
+                    📍
+                </div>
+
+                <div class="marker-label">
+                    📍 Guwahati
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERY VEHICLE -->
+
+            <div class="marker vehicle">
+
+                <div class="marker-icon">
+                    🚚
+                </div>
+
+                <div class="marker-label">
+                    🚚 Delivery Vehicle
+                </div>
+
+            </div>
+
+
+            <!-- NONGPOH -->
+
+            <div class="marker nongpoh">
+
+                <div class="marker-icon">
+                    📍
+                </div>
+
+                <div class="marker-label">
+                    📍 Nongpoh
+                </div>
+
+            </div>
+
+
+            <!-- RISK ZONE -->
+
+            <div class="risk-zone">
+
+                <div class="risk-zone-icon">
+                    🔴
+                </div>
+
+                <div class="risk-zone-text">
+                    Risk Zone
+                </div>
+
+            </div>
+
+
+            <!-- SHILLONG -->
+
+            <div class="marker shillong">
+
+                <div class="marker-icon">
+                    📍
+                </div>
+
+                <div class="marker-label">
+                    📍 Shillong
+                </div>
+
+            </div>
+
+
+            <!-- LEGEND -->
+
+            <div class="map-legend">
+
+                <div>
+                    <span class="green-line"></span>
+                    AI Route
+                </div>
+
+                <div>
+                    📍 Locations
+                </div>
+
+                <div>
+                    🔴 Risk Zone
+                </div>
+
+                <div>
+                    🚚 Delivery Vehicle
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LOCATION CARDS -->
+
+    <div class="location-panel">
+
+        <div class="location-card source">
+
+            <h3>📍 Guwahati</h3>
+
+            <p>Source Location</p>
+
+            <p>Assam, India</p>
+
+        </div>
+
+
+        <div class="location-card checkpoint">
+
+            <h3>📍 Nongpoh</h3>
+
+            <p>AI Route Checkpoint</p>
+
+            <p>Meghalaya, India</p>
+
+        </div>
+
+
+        <div class="location-card destination">
+
+            <h3>📍 Shillong</h3>
+
+            <p>Destination</p>
+
+            <p>Meghalaya, India</p>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAP INFO -->
+
+    <div class="map-info">
+
+        <div class="map-box">
+
+            <h4>🟢 AI Route</h4>
+
+            <p>
+                Guwahati → Nongpoh → Shillong
+            </p>
+
+        </div>
+
+
+        <div class="map-box">
+
+            <h4>🔴 Risk Zone</h4>
+
+            <p>
+                Landslide-prone area
+            </p>
+
+        </div>
+
+
+        <div class="map-box">
+
+            <h4>🚚 Delivery Vehicle</h4>
+
+            <p>
+                AI Route Active
+            </p>
+
+        </div>
+
+
+        <div class="map-box">
+
+            <h4>📏 Distance</h4>
+
+            <p>
+                99 km
+            </p>
+
+        </div>
+
+
+        <div class="map-box">
+
+            <h4>⏱️ ETA</h4>
+
+            <p>
+                3 hrs 15 mins
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="center">
+
+        <button
+            class="action-btn"
+            onclick="showPage('emergency')">
+
+            CHECK EMERGENCY STATUS
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================================================= -->
+<!-- EMERGENCY -->
+<!-- ================================================= -->
+
+<section id="emergency" class="page">
+
+    <div class="page-title">
+
+        <h1>Emergency Dashboard</h1>
+
+        <p>
+            Emergency and logistics alerts
+        </p>
+
+    </div>
+
+
+    <div class="alert">
+
+        <h3>🚨 Landslide Alert</h3>
+
+        <p>
+            Moderate landslide risk detected
+            near the selected route.
+            AI recommends avoiding the
+            affected zone.
+        </p>
+
+    </div>
+
+
+    <div class="alert warning">
+
+        <h3>🌊 Flood Risk</h3>
+
+        <p>
+            Water-level monitoring indicates
+            possible flooding in low-lying areas.
+            Drivers should proceed carefully.
+        </p>
+
+    </div>
+
+
+    <div class="alert warning">
+
+        <h3>🌧️ Weather Warning</h3>
+
+        <p>
+            Heavy rainfall may reduce
+            visibility and increase travel time.
+        </p>
+
+    </div>
+
+
+    <div class="alert safe">
+
+        <h3>✅ Logistics Status</h3>
+
+        <p>
+            Delivery vehicle is active.
+            AI-selected alternative route
+            is available.
+        </p>
+
+    </div>
+
+
+    <div class="center">
+
+        <button
+            class="action-btn"
+            onclick="showPage('route')">
+
+            FIND ALTERNATIVE ROUTE
+
+        </button>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- JAVASCRIPT -->
+<!-- ================================================= -->
+
+<script>
+
+function startApp(){
+
+    document.getElementById("loginPage")
+        .style.display="none";
+
+    document.getElementById("app")
+        .style.display="block";
+
+    showPage("home");
+}
+
+
+function showPage(pageName){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(function(page){
+
+            page.classList.remove("active");
+
+        });
+
+
+    const selectedPage =
+        document.getElementById(pageName);
+
+
+    if(!selectedPage){
+        return;
+    }
+
+
+    selectedPage.classList.add("active");
+
+
+    document
+        .querySelectorAll(".nav-buttons button")
+        .forEach(function(button){
+
+            button.classList.remove("active");
+
+        });
+
+
+    const currentButton =
+        document.getElementById(
+            "btn-" + pageName
+        );
+
+
+    if(currentButton){
+        currentButton.classList.add("active");
+    }
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+</script>
+
+</body>
+</html>
